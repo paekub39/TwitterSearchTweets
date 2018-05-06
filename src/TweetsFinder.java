@@ -108,7 +108,7 @@ public class TweetsFinder {
                 for (Status tweet : tweets) {
                 	tweetsCounting++;
                 	tweetsResult=tweet.getText() + " ";
-                	System.out.println(tweet.getUser().getScreenName() + " - " + tweet.getText() + " - " + tweetsCounting);
+                	//System.out.println(tweet.getUser().getScreenName() + " - " + tweet.getText() + " - " + tweetsCounting);
                 	bw.write(tweetsResult);
                 	if(tweetsCounting >= 15000){
                 		System.out.println("This hash tag has more than 15000 tweets. \nOur program cannot find tweets any more. Because Twitter has limit the amoung of tweets.");
