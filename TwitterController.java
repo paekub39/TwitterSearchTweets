@@ -17,9 +17,9 @@ public class TwitterController {
 	static boolean isNeedRetweet = false;
 	static boolean isSelectLanguage = false;
 	static boolean isSearchTweet = false;
-	static boolean isSearchRealTime = false;
 	static boolean isSearchUserTimeline = false;
 	static boolean isInputLocation = false;
+	static boolean isSearchByDate = false;
 	
 	static String input = "";
 	static int checkInput = 0;
@@ -50,44 +50,34 @@ public class TwitterController {
 		
 		while(true){
 			f.delete();
-			while(!isSearchTweet && !isSearchUserTimeline && !isSearchRealTime) {
+			while(!isSearchTweet && !isSearchUserTimeline) {
 				System.out.println("What you need to search.");
 				System.out.println("Enter 1: Search user timeline. (the 20 most recent statuses posted in the last 24 hours from the user)");
 				System.out.println("Enter 2: Search tweet with hashtag");
-				System.out.println("Enter 3: Search tweet with location");
 				checkInput = sc.nextInt();
 				if(checkInput == 1) {
 					isSearchTweet = false;
 					isSearchUserTimeline = true;
-					isSearchRealTime = false;
 				}
 				else if(checkInput == 2) {
 					isSearchTweet = true;
 					isSearchUserTimeline = false;
-					isSearchRealTime = false;
-				}
-				else if(checkInput == 3) {
-					isSearchTweet = false;
-					isSearchUserTimeline = false;
-					isSearchRealTime = true;
 				}
 				else {
 					System.out.println("ERROR: Please input the number again.");
 					isSearchTweet = false;
 					isSearchUserTimeline = false;
-					isSearchRealTime = false;
 				}
 			}
 			
 			if(isSearchTweet) {
 				isSearchUserTimeline = false;
-				isSearchRealTime = false;
-				System.out.println("Please enter hashtag that you want to search. (For example #SIT)");
+				System.out.println("\n\nPlease enter hashtag that you want to search. (For example #SIT)");
 				input = sc.next();
 				input = input.toLowerCase();
 				
 				while(!isInputLocation) {
-					System.out.println("Do you want to search with specific location.");
+					System.out.println("\n\nDo you want to search with specific location. (This function can search some of tweets because some tweet do not have a location in tweet.)");
 					System.out.println("Enter 1: If you want to search with specific location. (Use Latitude and Longitude to search.)");
 					System.out.println("Enter 2: If you do not want to search with specific location.");
 					checkInput = sc.nextInt();
@@ -111,8 +101,30 @@ public class TwitterController {
 					}
 				}
 				
+				while(!isSearchByDate) {
+					System.out.println("\n\nDo you want to search by period of date. (This function can not search that tweet more than 7 days ago.");
+					System.out.println("Enter 1: If you want to search by period of date.");
+					System.out.println("Enter 2: If you do not want to define period of date.");
+					checkInput = sc.nextInt();
+					if(checkInput == 1){
+						System.out.println("Please enter starting date. (Date should be formatted as YYYY-MM-DD)");
+						String startDate = sc.next();
+						System.out.println("Please enter ending date. (Date should be formatted as YYYY-MM-DD)");
+						String endingDate = sc.next();
+						tf1.setStartandEndDate(startDate, endingDate, true);
+						isSearchByDate = true;
+					}
+					else if(checkInput == 2) {
+						isSearchByDate = true;
+					}
+					else {
+						System.out.println("ERROR: Please enter again.");
+						isSearchByDate = false;
+					}
+				}
+				
 				while(!isSelectLanguage) {
-					System.out.println("Please Select language that you need to search from Twitter.");
+					System.out.println("\n\nPlease Select language that you need to search from Twitter.");
 					System.out.println("Enter 1: English");
 					System.out.println("Enter 2: Thai");
 					System.out.println("Enter 3: Other. (Input your language by ISO 639-1 code. Ex.en, th, etc.)");
@@ -135,7 +147,7 @@ public class TwitterController {
 				}
 				
 				while(!isChooseSearchType){
-					System.out.println("Please choose one");
+					System.out.println("\n\nPlease choose one");
 					System.out.println("Enter 1 if you need to search include retweet");
 					System.out.println("Enter 2 if you need to search exclude retweet");
 					checkInput = sc.nextInt();
@@ -155,7 +167,7 @@ public class TwitterController {
 				
 				tf1.findTweets(input, isNeedRetweet);
 				while(option!=3){
-					System.out.println("Select an option.");
+					System.out.println("\n\nSelect an option.");
 					System.out.println("Enter 1: Show how many tweets hashtag has.");
 					System.out.println("Enter 2: Show top 10 word that people said about the hashtag.");
 					System.out.println("Enter 3: Search new hashtag.");
@@ -167,6 +179,10 @@ public class TwitterController {
 						WordFrequency wf = new WordFrequency();
 						wf.readFile(fileName, input);
 					}else if(option == 3){
+						isInputLocation = false;
+						isSearchByDate = false;
+						isSelectLanguage = false;
+						isChooseSearchType = false;
 						option = 0;
 						break;
 					}
@@ -176,16 +192,10 @@ public class TwitterController {
 			}
 			if(isSearchUserTimeline){
 				isSearchTweet = false;
-				isSearchRealTime = false;
-				System.out.println("Please enter user's ID");
+				System.out.println("\n\nPlease enter user's ID");
 				input = sc.next();
 				tf1.findUserTimeline(input);
-			}
-			if(isSearchRealTime) {
-			
-				
-			}
-			
+			}			
 		}
 		
 	}

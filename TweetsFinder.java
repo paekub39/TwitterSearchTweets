@@ -25,7 +25,8 @@ public class TweetsFinder {
 	static Boolean isSetLang = false;
 	String language = "";
 	String input = "";
-	
+	boolean isSetDate = false;
+	String startDate, endDate;
 	boolean isLocationUsed = false;
 	GeoLocation gl;
 	int radius;
@@ -58,6 +59,12 @@ public class TweetsFinder {
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+	
+	public void setStartandEndDate(String st, String end, boolean isSetDate) {
+		this.startDate = st;
+		this.endDate = end;
+		this.isSetDate = isSetDate;
 	}
 	
 	public void setLocation(double la, double ln, int radius, boolean isLocationUsed) {
@@ -101,16 +108,15 @@ public class TweetsFinder {
             }else{
             	query.setQuery(hashtag + " +exclude:retweets");
             }
+            
+            if(isSetDate) {
+            	query.setSince(startDate);
+            	query.setUntil(endDate);
+            }
+            
             query.setCount(100);
             query.setLang(language);
-            /*
-            if(isSetLang){
-            	query.setLang("");
-            }
-            else{
-            	query.setLang("");
-            }
-            */
+
             if(isLocationUsed) {
             	query.setGeoCode(gl, radius, Unit.valueOf("km"));
             }
