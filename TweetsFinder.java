@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.GeoLocation;
 import twitter4j.Query;
+import twitter4j.Query.Unit;
 import twitter4j.QueryResult;
+import twitter4j.StallWarning;
 import twitter4j.Status;
+import twitter4j.StatusDeletionNotice;
+import twitter4j.StatusListener;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -21,6 +26,9 @@ public class TweetsFinder {
 	String language = "";
 	String input = "";
 	
+	boolean isLocationUsed = false;
+	GeoLocation gl;
+	int radius;
 	static TwitterFactory tf;
 	static BufferedWriter bw = null;
     static FileWriter fw = null;
@@ -52,6 +60,13 @@ public class TweetsFinder {
 		this.language = language;
 	}
 	
+	public void setLocation(double la, double ln, int radius, boolean isLocationUsed) {
+		this.gl = new GeoLocation(la,ln);
+		this.radius = radius;
+		this.isLocationUsed = isLocationUsed;
+	}
+	
+		
 	public void findUserTimeline(String input) {
 		this.input = input;
 		Twitter twitterUser = tf.getInstance();
@@ -80,6 +95,7 @@ public class TweetsFinder {
         	List<Status> tweets = null;
         	tweetsCounting = 0;
             Query query = new Query();
+  
             if(isSearchWithRetweet){
             	query.setQuery(hashtag);
             }else{
@@ -95,8 +111,12 @@ public class TweetsFinder {
             	query.setLang("");
             }
             */
+            if(isLocationUsed) {
+            	query.setGeoCode(gl, radius, Unit.valueOf("km"));
+            }
             QueryResult result;
             do {
+            	
                 result = twitter.search(query);
                 
                 tweets = result.getTweets();
@@ -104,7 +124,7 @@ public class TweetsFinder {
                 for (Status tweet : tweets) {
                 	tweetsCounting++;
                 	tweetsResult=tweet.getText() + " ";
-                	System.out.println(tweet.getUser().getScreenName() + " - " + tweet.getText());
+                	System.out.println(tweet.getUser().getScreenName() + " - " + tweet.getText() + " geocode = " + tweet.getGeoLocation());
                 	bw.write(tweetsResult);
                 	if(tweetsCounting >= 1000){
                 		System.out.println("\n\nThis hash tag has more than 1000 tweets. \nWe limit tweet search only 1000 tweets");
