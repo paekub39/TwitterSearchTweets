@@ -162,7 +162,7 @@ public class TwitterController {
 				while(option!=3){
 					System.out.println("\n\nSelect an option.");
 					System.out.println("Enter 1: Show how many tweets hashtag has.");
-					System.out.println("Enter 2: Show top 10 word that people said about the hashtag.");
+					System.out.println("Enter 2: Show top 10 word that people said about the hashtag. (This function can use only in English.)");
 					System.out.println("Enter 3: Search new hashtag.");
 					
 					option = sc.nextInt();
