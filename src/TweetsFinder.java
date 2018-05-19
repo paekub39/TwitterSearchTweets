@@ -8,14 +8,10 @@ import twitter4j.GeoLocation;
 import twitter4j.Query;
 import twitter4j.Query.Unit;
 import twitter4j.QueryResult;
-import twitter4j.StallWarning;
 import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
-import twitter4j.conf.ConfigurationBuilder;
 
 public class TweetsFinder {
 	private String hashtag;
@@ -130,7 +126,6 @@ public class TweetsFinder {
                 for (Status tweet : tweets) {
                 	tweetsCounting++;
                 	tweetsResult=tweet.getText() + " ";
-                	System.out.println(tweet.getUser().getScreenName() + " - " + tweet.getText() + " geocode = " + tweet.getGeoLocation());
                 	bw.write(tweetsResult);
                 	if(tweetsCounting >= 1000){
                 		System.out.println("\n\nThis hash tag has more than 1000 tweets. \nWe limit tweet search only 1000 tweets");

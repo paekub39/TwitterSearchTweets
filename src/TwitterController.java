@@ -2,14 +2,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
-import twitter4j.GeoLocation;
-import twitter4j.StallWarning;
-import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
 import twitter4j.TwitterFactory;
-import twitter4j.TwitterStream;
-import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
 public class TwitterController {
