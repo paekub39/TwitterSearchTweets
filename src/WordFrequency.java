@@ -34,6 +34,7 @@ public class WordFrequency {
 				}
 			}
 			words.remove(hashtag);
+			words.remove("rt");
 			in.close();
 		} finally{	
 		}
